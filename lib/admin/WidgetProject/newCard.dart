@@ -18,7 +18,7 @@ int i=1;
  static String question ='';
  static String typeInput ='';
  static String typeInput2=''; //textInput !!
-  List<String> listContextInput=[];
+  List<String> listContextInput=[''];
  int nbr=0;
 
 
@@ -328,20 +328,21 @@ if(typeInput2==inputsType[3]){
                 ),
                   ),
                  
-                 Expanded(
+              Expanded(
                    flex: 1,
                    child: SizedBox(
                      width: 50,
                      height: 20,
-                      child: RaisedButton(
-                     color: Color.fromRGBO(42, 45, 46, .9),
-                     
-                     child:  Icon(Icons.delete,size: 20,color: Color.fromRGBO(245, 177, 42, .9),),
+                      child:IconButton(
+                       icon:  Icon(Icons.cancel,size: 20,color: Color.fromRGBO(169, 50, 38 , .9)),
+                       
+                       key: new GlobalKey<FormState>(),
                      onPressed: (){
                 setState(() {
                   listKeys.remove(key);
                 });
-              }),
+              }
+                    ),
                    ),)
         
           ]

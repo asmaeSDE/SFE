@@ -1,13 +1,16 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:programe/admin/WidgetProject/newCard.dart';
+import 'package:programe/admin/listForms/listForm.dart';
 import 'package:programe/services/formService.dart';
 import 'package:programe/models/form.dart';
 import 'package:programe/models/card.dart';
 import 'package:programe/shares/constant.dart';
-import 'package:path/path.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:path/path.dart';
 //var myCard= NewCard();
 final keyCard = new GlobalKey<NewCardState>();
 final List<GlobalKey<NewCardState>> listKeysCard=[];
@@ -33,22 +36,25 @@ int valInt=0;
     final _formKey = GlobalKey<FormState>();
   Formulaire formTest= new Formulaire();
     @override
-  
-
-
-Future getImage() async{
-  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-  setState(()
-  {
-    _image =image;
-    print('Image path $_image');
-
-  });
-  return image;
-  } 
+  Future uploadImage(BuildContext context) async{
+     String fileName=_image.path.toString();
+     StorageReference firebaseStorageRef=FirebaseStorage.instance.ref().child(fileName);
+     StorageUploadTask uploadTask=firebaseStorageRef.putFile(_image);
+     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+     setState(() {
+       print("IMAAAAAAAAAAAAAAAAGE");
+       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Image de votre formulaire est téléchargée!'),));
+     });
+   }
   Widget build(BuildContext context){
-   
+   Future getImageForm() async{
+     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+     setState(() {
+       _image=image;
+       print('Image pth$_image');
+     });
+   }
+  
     return new Scaffold(
    backgroundColor: Color.fromRGBO(25, 111, 61 , .9),
       appBar: new AppBar(
@@ -75,31 +81,45 @@ Future getImage() async{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(children: <Widget>[
-                 Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child:CircleAvatar(radius: 100,
-                backgroundColor: Color.fromRGBO(25, 111, 61 , .9),
-                child: ClipOval(
-                  child:SizedBox(
-                    width: 120,
-                    height: 120.0,
-                    child: _image == null
-        ? AssetImage('images/icon.png')
+                 Container(
+  height: 160,
+  width: 150,
+  
+  decoration: BoxDecoration(
+   
+    boxShadow: [
+      BoxShadow(
+        color:Colors.white,
+        blurRadius :5.0,
+        
+      )
+    ],
+    
+    
+   image : DecorationImage(
+     
+    image: _image == null
+        ? AssetImage('images/logo.png')
         : FileImage(_image),
-                   
-                    ),
-                ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top:80.0,left: 0),
-                child: IconButton(icon: Icon(Icons.camera_alt,size:25.0,color: Colors.white,), 
-                onPressed: (){
-                 getImage();
-                }
-                
-                ),
-              ),
+     
+     fit: BoxFit.contain,
+     
+   ) 
+  ),
+alignment: Alignment.bottomRight,
+//child:(_image!=null)?Image.file(_image,fit:BoxFit.fill),
+child: IconButton(
+  icon: Icon(
+    FontAwesomeIcons.camera,
+    size: 23.0,
+    color:Colors.black54,
+  ),
+   onPressed: (){
+getImageForm();
+   }),
+
+),
+             
               ]),
              
               Padding(
@@ -126,7 +146,7 @@ Future getImage() async{
                decoration: inputDescription,
                   onChanged: (val)
                     {
-                   // setState(() => formTest.title = val);
+                  setState(() => formTest.description = val);
                     },
                         ), ],
           ),
@@ -134,8 +154,8 @@ Future getImage() async{
     ),
   ],
 ),
-               Text('Title Form:',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),), 
-            
+
+
             for(GlobalKey<NewCardState> itemKey in listKeysCard) 
              Column(
             children: <Widget>[
@@ -196,6 +216,7 @@ Future getImage() async{
 
   }
    void showMyDialog(BuildContext context) {
+     
     showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -224,6 +245,12 @@ Future getImage() async{
               child:  RaisedButton(
                  
                           onPressed: () async{
+
+                             String filename=basename(_image.path);
+StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(filename);
+StorageUploadTask uploadTasck = firebaseStorageRef.putFile(_image);
+StorageTaskSnapshot taskSnapshot = await uploadTasck.onComplete;
+var url = await taskSnapshot.ref.getDownloadURL();
                           //  uploadImage(context);
               // if (_formKey.currentState.validate()) {
                 bool i=false;
@@ -237,9 +264,15 @@ Future getImage() async{
                    var keyForm = new GlobalKey<FormState>();
                    formTest.idForm= keyForm.toString();
                     for(GlobalKey<NewCardState> itemKey in listKeysCard){ 
+
+                     
+
                       itemKey.currentState.validateAndSave();
                      if(itemKey.currentState.validateform()==true){
+                       
+
                         if (_formKey.currentState.validate()) {
+                          
                       print(itemKey.currentState.cardModel.question);
                       itemKey.currentState.listContextInput.add(itemKey.currentState.inputTest);
                      setState(() {
@@ -249,6 +282,15 @@ Future getImage() async{
                       itemKey.currentState.cardModel.listContextInput=testList;
                       itemKey.currentState.cardModel.listContextInput.removeWhere((value) => value == null);
                       itemKey.currentState.cardModel.idForm= formTest.idForm;
+                      if(itemKey.currentState.cardModel.inputType=='Paragraphe'){
+                        testList.add('');
+                         itemKey.currentState.cardModel.listContextInput=testList;
+                      }
+                      if( itemKey.currentState.cardModel.inputType=='' || itemKey.currentState.cardModel.inputType==null){
+                        itemKey.currentState.cardModel.inputType='Paragraphe';
+                      }
+
+
                       formDAO.createCard(itemKey.currentState.cardModel); 
                       i=true;
                         }
@@ -257,8 +299,15 @@ Future getImage() async{
                     showMyDialog(context);
                      }
                     }
-                    if(i==true){formDAO.createForm(formTest);
+                    if(i==true){
+                      formTest.url=url;
+                       setState(() {
+                 
+                     formTest.url=url;
+                       });
+                      formDAO.createForm(formTest);
                      for(GlobalKey<NewCardState> itemKey in listKeysCard){
+                      
                       itemKey.currentState.resetForm();
                     //   itemKey.currentState.listContextInput.clear();
                      }
@@ -266,9 +315,15 @@ Future getImage() async{
                      setState(() {
                      listKeysToString.clear();
                      listKeysCard.clear();
-                     });
-                     keyForm.currentState.reset();
+                  
+                   //  keyForm.currentState.reset();
                      _formKey.currentState.reset();
+                    titleController.clear();
+                    descriptionController.clear();
+                     
+                     });
+                     
+                    
                     }
                   
                   

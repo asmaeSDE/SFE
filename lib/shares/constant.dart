@@ -3,10 +3,33 @@ import 'package:flutter/material.dart';
 bool isCollapsed = true;
   double screenWidth, screenHeight;
   final Duration duration = const Duration(milliseconds: 300);
+  AnimationController _controller;
+  Animation<double> _scaleAnimation;
+  Animation<double> _menuScaleAnimation;
+  Animation<Offset> _slideAnimation;
 final Color backgroundColor = Color(0xFF4A4A58);
 
-
+final emailField1 =
+           InputDecoration(
+             
+              contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0,15.0),
+              hintText: "Email",
+              enabledBorder: const OutlineInputBorder(
+      borderSide: const BorderSide(color: Color.fromRGBO(132, 199, 115, .9), width: 2.0),
+    ),
+              border:
+                  OutlineInputBorder(),
+             );
  
+final passwordField1 = InputDecoration(
+              contentPadding: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+              hintText: "mot de passe",
+              enabledBorder: const OutlineInputBorder(
+      borderSide: const BorderSide(color: Color.fromRGBO(132, 199, 115, .9), width: 2.0),
+    ),
+              border:
+                  OutlineInputBorder(),
+                 );
 
 final emailField =
            InputDecoration(
@@ -14,20 +37,24 @@ final emailField =
               contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0,15.0),
               hintText: "Email",
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),
-                  borderSide:  BorderSide(color: Colors.orange, width: 0.0),
-                  ),
-                focusColor: Colors.green,
-                  );
-    
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)));
+
+  
+
+final telField =
+           InputDecoration(
+             
+              contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0,15.0),
+              hintText: "+212....",
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)));   
 final Nom =
            InputDecoration(
              
-              contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 15.0),
+              contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 15.0),
               hintText: "Nom",
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)));
-                  
 
 
          final passwordField = InputDecoration(
@@ -36,7 +63,11 @@ final Nom =
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)));
 
-
+final ConfirmpasswordField = InputDecoration(
+              contentPadding: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+              hintText: "Confirmer mot de passe",
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)));
                   
 final Prenom =
            InputDecoration(

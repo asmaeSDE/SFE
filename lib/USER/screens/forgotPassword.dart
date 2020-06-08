@@ -131,7 +131,7 @@ Material(
   color:  Colors.orange,
   child : MaterialButton(
 child: Text(
-    'Réinitialiser',
+    'Reset',
     
      style: TextStyle(color : Colors.white , fontFamily: 'Montserrat' ,fontWeight: FontWeight.bold) ,
   ),

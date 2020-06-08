@@ -115,8 +115,7 @@ FirebaseAuth.instance.currentUser().then((user){
                      Navigator.of(context).push(CupertinoPageRoute(
                     builder: (BuildContext context) => home()));
                   }else{
-                    Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (BuildContext context) => Login_phone())); 
+                   print(user); 
                   }
 
 

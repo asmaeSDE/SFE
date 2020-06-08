@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:programe/models/card.dart';
-import 'package:programe/admin/listForms/addNewOptions.dart';
+import 'package:programe/admin/listForms/cardResponseAdmin.dart';
 
 import 'package:programe/admin/listForms/newCardLittle.dart';
 import 'package:programe/admin/listForms/cardQuestion.dart';
@@ -51,7 +51,6 @@ class _EditFormResponseState extends State<EditFormResponse> {
         .updateData({
 
           'question': modelCard.question,
-         // 'listContextInput': modelCard.listContextInput,
           'inputType':modelCard.inputType,
           
           });
@@ -146,8 +145,51 @@ class _EditFormResponseState extends State<EditFormResponse> {
  
                      
                  );
-                 case 1: return new Center(
-                   child: new Text('Second screen'),
+                 case 1: return Center(
+                   child:  Column(
+                   //    mainAxisAlignment: MainAxisAlignment.start,
+                     children: <Widget>[
+                    Expanded(
+                    flex: 5,
+                      child: SizedBox(
+                     width: 500,
+                     height: 500,
+                      child: Container(
+                         child: FutureBuilder(
+                         future: getCards(),
+             builder: ( _, snapshot){
+           Widget list=Column(children: <Widget>[],);
+           if(snapshot.connectionState == ConnectionState.waiting){
+            list = Center(child: Text('Loading ... '),);
+            
+          }
+          else {
+       list= ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          cacheExtent: 1000,
+                          addAutomaticKeepAlives: true,
+                          reverse: false,
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (_, index) {
+                   CardModel cardInside=new CardModel(idCard: snapshot.data[index].documentID,idForm:  widget.idForm,question: snapshot.data[index].data['question'],listResponses: List<String>.from(snapshot.data[index].data['listResponses']),inputType: snapshot.data[index].data['inputType'] );
+                          
+                              return  CardAdminResponse(key:Key(cardInside.idCard),cardInside: cardInside,snapshot: snapshot,index: index);
+    
+           },
+           );
+          }
+          return list;
+          }
+                          ),
+                         ),
+                   ),),
+                      
+                        
+                     ],
+                   ),
+ 
+                     
                  );
                }
              }),

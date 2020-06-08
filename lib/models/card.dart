@@ -4,6 +4,6 @@ class CardModel {
   String question;
   String inputType;
   List<String> listContextInput;
-  
-  CardModel({this.idCard,this.question,this.inputType,this.listContextInput,this.idForm});
+  List<String> listResponses; 
+  CardModel({this.idCard,this.question,this.inputType,this.listContextInput,this.idForm,this.listResponses});
 }

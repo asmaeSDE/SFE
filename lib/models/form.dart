@@ -3,5 +3,6 @@ class Formulaire{
   String title;
   List<String> listCards;
   String description;
-  Formulaire({this.title,this.listCards,this.idForm,this.description});
+  String url;
+  Formulaire({this.title,this.listCards,this.idForm,this.description,this.url});
 }

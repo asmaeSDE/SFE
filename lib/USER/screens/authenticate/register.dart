@@ -48,8 +48,8 @@ final FirebaseAuth  _authentification = FirebaseAuth.instance;
       String password ='';
       String comfirmpassword ='';
       String error ='';
-      String phoneNo;
       bool loading =false;
+      String tel='';
 
       //---------------------------------------
 void getCurrentUser() async{
@@ -72,18 +72,9 @@ void getCurrentUser() async{
   TextEditingController prenomController = TextEditingController();
   TextEditingController cinController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-   TextEditingController phoneController = TextEditingController();
+   TextEditingController telController = TextEditingController();
 //Widget Alert styling 
 
- AnimationType animationType;
- Duration animationDuration;
- ShapeBorder alertBorder;
- bool isCloseButton;
- bool isOverlayTapDismiss;
- Color overlayColor;
- TextStyle titleStyle;
- TextStyle descStyle;
- EdgeInsets buttonAreaPadding;  
 
 
 //-------------------------------------
@@ -100,12 +91,27 @@ Future getImage() async{
   return image;
   } 
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+
+
   @override
   Widget build(BuildContext context) {
-  
+  // Create AlertDialog  
+  AlertDialog alert = AlertDialog(  
+    title: Text("Vous avez été enregistré avec succès",style: TextStyle(fontFamily: 'Montserrat',fontWeight: FontWeight.bold , color:Colors.green)),  
+    content: Text("veuillez confirmer votre email, en visitant votre boite mail"),  
+    actions: [  
+     FlatButton(  
+    child: Text("OK"),  
+    onPressed: () {  
+      Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (BuildContext context) => SignIn())); 
+    },  
+  ),
+    ],  
+  );  
    
       return Scaffold(
-       
  key: _scaffoldKey,
       resizeToAvoidBottomPadding: false ,
       backgroundColor: Colors.green[255],
@@ -135,7 +141,6 @@ actions: <Widget>[
 
       ),
 body: Container(
-  
   padding: EdgeInsets.symmetric(vertical:20.0,horizontal:50.0),
   child : Form(
     key: _formeKey,
@@ -181,30 +186,6 @@ getImage();
 ),
  SizedBox(height: 10.0),
 
-TextFormField(
-  keyboardType: TextInputType.phone,
-  controller:phoneController ,
- decoration: InputDecoration(
-             
-              contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0,15.0),
-              hintText: "+212",
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0),
-                  borderSide:  BorderSide(color: Colors.orange, width: 2.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(borderSide:  BorderSide(color: Colors.orange, width: 2.0),
-                  borderRadius: BorderRadius.circular(32.0)) ,
-                focusColor: Colors.green,
-                fillColor: Colors.green,
-                  ),
-   validator: (val) => phoneNo,
-  
-onChanged: (val)
-{
-setState(() => phoneNo =val);
-},
-),
-
 //nom
 TextFormField(
    decoration : Nom,
@@ -234,15 +215,34 @@ setState(() => prenom = val);
    }
  ),
  SizedBox(height: 20.0),
+
+//TEL
+ TextFormField(
+   decoration : telField,
+  controller: telController,
+
+  validator: (value) {
+              if(value.length < 7){
+                return 'Votre numero de telephone est incorrect !!';
+              }
+            },
+   onChanged : (val)
+   {
+setState(() => tel = val);
+   }
+ 
+
+  
+ ),
+ 
+  SizedBox(height: 20.0),
  //EMAIL
  TextFormField(
    decoration : emailField,
   controller:  emailController,
-    validator:(value) {
-      if (!EmailValidator.validate(value)) {
-        return 'Please enter a valid email';
-      }
-    },
+  
+        validator: (val) => val.isEmpty ? 'Email can\'t be empty' : null,
+    
    onChanged : (val)
    {
 setState(() => email = val);
@@ -325,7 +325,7 @@ StorageUploadTask uploadTasck = firebaseStorageRef.putFile(_image);
 StorageTaskSnapshot taskSnapshot = await uploadTasck.onComplete;
 var url = await taskSnapshot.ref.getDownloadURL();
        _authentification.createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text)
+            email: emailController.text.trim(), password: passwordController.text)
         .then((result) {
       UserCollection.document(result.user.uid).setData({
         'email': emailController.text,
@@ -335,8 +335,8 @@ var url = await taskSnapshot.ref.getDownloadURL();
         'ID_user' : result.user.uid,
         'image': url,
         'access':access,
-         'role':'user',
-         'Telephone':phoneController,
+        'Telephone':telController.text,
+    
         
       }).catchError((err) {
       
@@ -346,12 +346,17 @@ var url = await taskSnapshot.ref.getDownloadURL();
 
       if (result.user != null){
   result.user.sendEmailVerification();
-       _showScaffold("GOOD"); 
-print('ok');
+      // _showScaffold("votre compte est créé avec succés"); 
+showDialog(  
+    context: context,  
+    builder: (BuildContext context) {  
+      return alert;  
+    },  
+  );  
    
 }else
 {
-  print('ono');
+  print('Ereur!!');
 }
 
 
@@ -391,7 +396,6 @@ SizedBox(height:20.0),
   
 
   
- 
 
 
 void _showScaffold(String message) {

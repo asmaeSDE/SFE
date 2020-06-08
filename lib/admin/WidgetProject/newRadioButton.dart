@@ -1,43 +1,36 @@
 import 'package:flutter/material.dart';
 class NewRadio extends StatefulWidget {
-   NewRadio({Key key}) : super(key: key) ;
+  final String inputRadio;
+   NewRadio({Key key,this.inputRadio}) : super(key: key) ;
   @override
-  _NewRadioState createState() => _NewRadioState();
+  NewRadioState createState() => NewRadioState();
 }
-class _NewRadioState extends State<NewRadio> {
-   String inputRadio ='';
+class NewRadioState extends State<NewRadio> {
+    String groupValue;
   
   @override
    
    Widget build(BuildContext context){
-     return new  Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-             SizedBox(
-  width: 200,
-  child:  radioWidget(),
-   ),
-        
-          ]
-             );
+     return new   SizedBox(
+                     width: 200,
+                     height: 100,
+       child: Container(
+         child:ListTile(
+             
+                   title: Text(widget.inputRadio),
+                    leading: Radio(
+                      activeColor: Color.fromRGBO(42, 45, 46, .9) ,
+                      value: widget.inputRadio,
+                      groupValue: groupValue,
+                      onChanged:  (newValue) async{
+                        print(newValue);
+                        setState(() {
+                           groupValue = newValue;
+                        });
+                        },
+              ),
+              ),),);
    }
 
-   Widget radioWidget(){
-         return new  ListTile(
-                  title: TextField(
-                    onChanged: (val)
-                {
-              setState(() => inputRadio = val);
-                },
-                  ),
-                  leading: Radio(
-                    value: inputRadio,
-                    groupValue: inputRadio,
-                    onChanged: (val) {
-                      },
-            ),
-            );
-   }
-  
   
 }

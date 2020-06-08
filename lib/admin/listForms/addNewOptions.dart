@@ -71,12 +71,14 @@ class NewOptionState extends State<NewOption> {
   }
   Widget enregistrer(){
     return  RaisedButton(
+                          
                           onPressed: (){
        setState(() {
       listContextInput.add(addItem);
     });
      addItemtoListDB(listContextInput);
-    },
+     listKeys.clear();
+    }, 
                           padding: const EdgeInsets.all(0.0),
                           child: Container(
                             decoration: const BoxDecoration(

@@ -139,9 +139,10 @@ class CardQuestionState extends State<CardQuestion> {
                 
             ],
           ),
+           if(widget.cardInside.inputType==inputsType[0] || widget.cardInside.inputType==inputsType[1] || widget.cardInside.inputType==inputsType[2])
          RaisedButton(
                    //  heroTag: new GlobalKey<FormState>(),
-                       child: Text('add new Option',style:  new TextStyle(color:Color.fromRGBO(28, 40, 51 , .9)),),
+                       child: Text('nouvelles options',style:  new TextStyle(color:Color.fromRGBO(28, 40, 51 , .9)),),
                       color: Color.fromRGBO(253, 235, 208 , .9),
                    key: new GlobalKey<FormState>(),
                        
@@ -333,4 +334,20 @@ deleteItemFromListDB(item,cardInside);
 
 
 
-/** */
+/* Widget newOption(CardModel cardInside){
+    Widget wt= new SizedBox();
+    if(cardInside.inputType==inputsType[0] || cardInside.inputType==inputsType[1] || cardInside.inputType==inputsType[2]){
+      wt=RaisedButton(
+                   //  heroTag: new GlobalKey<FormState>(),
+                       child: Text('Nouvelles options',style:  new TextStyle(color:Color.fromRGBO(28, 40, 51 , .9)),),
+                      color: Color.fromRGBO(253, 235, 208 , .9),
+                   key: new GlobalKey<FormState>(),
+                       
+                       onPressed: () {
+              Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context){
+                   return  NewOption(idCard: widget.cardInside.idCard,cardUpdated: widget.cardInside,);
+                    }));
+                          },
+                    );
+    }
+  }*/

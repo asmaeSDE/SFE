@@ -22,30 +22,40 @@ class _ListUsersState extends State<ListUsers> {
      @override
      Widget build(BuildContext context) {
      return Scaffold(
-      body: Container(
-        child: FutureBuilder(
-          future: getUsers(),
-          builder: ( _, snapshot){
-           Widget list = Column(children: <Widget>[
-            
-           ],);
-           if(snapshot.connectionState == ConnectionState.waiting){
-            list = Center(child: Text('Loading ... '),);
-            
-          }
-          else {
-           
+      body: Container( 
+        
+        child: Column(
+          children: <Widget>[
+                Card(
+                  color: Color.fromRGBO(253, 235, 208 , .9),
+                  child: Text('Activez les accès des utilisateurs pour qu\'ils peuvent utiliser les formulaires créés ',
+                  style: TextStyle(color:Color.fromRGBO(25, 111, 61 , .9)),)),
+        
+            FutureBuilder(
+              future: getUsers(),
+              builder: ( _, snapshot){
+               Widget list = Column(children: <Widget>[  
+                
+               ],);
+               if(snapshot.connectionState == ConnectionState.waiting){
+                list = Center(child: Text('Loading ... '),);
+                
+              }
+              else {
+               
        list=  ListView.builder(
-         
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-           itemCount: snapshot.data.length,
-           itemBuilder: (_, index){
-           return CardUser(snapshot: snapshot,index: index,result: snapshot.data[index].data['access']);
-           });
-          }
-          return list;
-          }),
+             
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+               itemCount: snapshot.data.length,
+               itemBuilder: (_, index){
+               return CardUser(snapshot: snapshot,index: index,result: snapshot.data[index].data['access']);
+               });
+              }
+              return list;
+              }),
+            ],
+        ),
       ),
 
    

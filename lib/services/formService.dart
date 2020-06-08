@@ -13,7 +13,9 @@ class FormService
       .add({
         'title': formulaire.title,
         'idForm': formulaire.idForm,
-        'keyCards': formulaire.listCards,
+        'Description': formulaire.description,
+        'image': formulaire.url 
+
       });
   print(ref.documentID);
 }
@@ -26,6 +28,7 @@ void createCard(CardModel card) async {
         'idForm': card.idForm,
         'inputType': card.inputType,
         'listContextInput': card.listContextInput,
+        'listResponses': [],
         'question': card.question,
       });
   print(ref.documentID);

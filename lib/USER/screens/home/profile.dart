@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:programe/USER/screens/home/EditProfile.dart';
 import 'package:programe/services/auth.dart';
 
+import 'home.dart';
+
 class profile extends StatefulWidget {
     profile({Key key}) : super(key: key);
  
@@ -71,7 +73,7 @@ return SafeArea(
   
            
            SizedBox(
-           height: 20.0,
+           height: 30.0,
            width: 190.0,
   
            child: Divider(
@@ -234,12 +236,13 @@ return SafeArea(
    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
   color:  Colors.orange,
   onPressed: (){
-  
+   Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (BuildContext context) => home()));
   },
   elevation: 4.0,
   splashColor: Colors.black,
   child: Text(
-    'Cancel',
+    'Retour',
     style: TextStyle(
   color:Colors.white,
   fontSize: 16.0
@@ -262,7 +265,7 @@ return SafeArea(
   elevation: 4.0,
   splashColor: Colors.black,
   child: Text(
-    'Edit',
+    'Modifier le profil',
     style: TextStyle(
   color:Colors.white,
   fontSize: 16.0

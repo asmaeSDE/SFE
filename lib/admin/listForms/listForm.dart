@@ -18,6 +18,12 @@ class _ListFormsState extends State<ListForms> {
              return query.documents;
   
    }
+   @override
+  void initState() {
+   
+    super.initState();
+     getForms();
+  }
     @override
     Widget build(BuildContext context) {
     
@@ -35,6 +41,7 @@ class _ListFormsState extends State<ListForms> {
           else {
            
        list= new SizedBox(
+         width: 500,
              child:  ListView.builder(
            itemCount: snapshot.data.length,
            

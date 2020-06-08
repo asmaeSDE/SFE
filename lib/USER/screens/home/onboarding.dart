@@ -87,7 +87,7 @@ pr.style(
 
 pr.update(
   progress: 50.0,
-  message: "S'il vous plaît, attendez...",
+  message: "S'il vous plaît, attendez ...",
   progressWidget: Container(
     padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
   maxProgress: 100.0,
@@ -136,8 +136,6 @@ next: const Icon(Icons.arrow_forward),
        },
       onSkip: () {
         
- 
-              
                 Navigator.of(context).push(CupertinoPageRoute(
                     builder: (BuildContext context) => authenticate()));
             

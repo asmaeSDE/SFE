@@ -71,6 +71,7 @@ bool isSwitch = false;
                    
                     updateLED(val,widget.snapshot.data[widget.index].documentID);
                      handleSwitch(val);
+                     
                   },
                   activeTrackColor:  Color.fromRGBO(130, 224, 170  , .9),
                   activeColor: Colors.white,

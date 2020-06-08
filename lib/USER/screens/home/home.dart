@@ -2,14 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:programe/USER/screens/home/Questions.dart';
 import 'package:programe/services/auth.dart';
 import 'package:programe/shares/NavDrawer.dart';
 import 'package:programe/shares/constant.dart';
-
-
+import 'package:flutter_share/flutter_share.dart';
 
 
 
@@ -29,6 +27,8 @@ AuthService auth = AuthService();
 FirebaseUser loggedInUser;
 
  final _formKey = GlobalKey<FormState>();
+
+ 
 
 
 @override
@@ -51,7 +51,6 @@ void initState()
     print(e);
   }
 }
-
 
 Widget _buildList(BuildContext context, DocumentSnapshot document) {
     return Container(
@@ -87,6 +86,7 @@ Widget _buildList(BuildContext context, DocumentSnapshot document) {
                           color: Colors.green[300],
                         ),
                       ),
+                      if(document.data['Description']!=null || document.data['Description']=='')
                        SizedBox(height: 10.0),
                        Text( 
                         document.data['Description'],
@@ -101,7 +101,7 @@ Widget _buildList(BuildContext context, DocumentSnapshot document) {
                           child: ButtonBar(
                             children: <Widget>[
                            FlatButton(
-                            child: const Text('Plus de détails',
+                            child: const Text('More Details',
                             
                             style: TextStyle(
                           fontSize: 14,
@@ -116,13 +116,13 @@ Widget _buildList(BuildContext context, DocumentSnapshot document) {
                             onPressed: () { 
 
 String idForm = document['idForm'];
-
+String nomForm= document['title'];
  Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (BuildContext context) => Questions(idForm:idForm)));
+                    builder: (BuildContext context) => FormUser(idForm:idForm,nomForm:nomForm)));
 
                              },
                           ),
-                          FlatButton(
+                           FlatButton(
                             child: const Text('partager',
                              style: TextStyle(
                           fontSize: 14,
@@ -176,7 +176,6 @@ actions: <Widget>[
 
       ),
       drawer:NavDrawer(),
-      
 
       body: StreamBuilder(
         stream: Firestore.instance.collection('Formulaire').snapshots(),
@@ -190,8 +189,8 @@ actions: <Widget>[
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context,index)
             {
-          
-       
+            
+
 return _buildList(context, snapshot.data.documents[index]);
 
             });
